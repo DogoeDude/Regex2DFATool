@@ -49,6 +49,14 @@ class LexicalAnalyzerGUI:
         self.test_entry.pack(fill=tk.X, pady=(0, 5))
         ttk.Button(test_frame, text="Test Input", command=self.test_input).pack(pady=5)
 
+        # Add animation controls to test frame
+        self.animate_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(test_frame, text="Animate", variable=self.animate_var).pack(side=tk.LEFT, padx=5)
+        self.animation_speed = tk.Scale(test_frame, from_=0.5, to=2.0, resolution=0.1, 
+                                      orient=tk.HORIZONTAL, label="Animation Speed")
+        self.animation_speed.set(1.0)
+        self.animation_speed.pack(side=tk.LEFT, padx=5)
+
         # Results Section
         results_frame = ttk.LabelFrame(upper_frame, text="Test Results", padding="5")
         results_frame.pack(fill=tk.BOTH, expand=True, pady=5)
@@ -228,11 +236,46 @@ class LexicalAnalyzerGUI:
             return
 
         try:
-            is_accepted = self.scanner.test_input(test_string)
-            result = "accepted" if is_accepted else "rejected"
-            self.log_result(f"Input '{test_string}' is {result} by the DFA")
+            if self.animate_var.get():
+                self.animate_string_processing(test_string)
+            else:
+                is_accepted = self.scanner.test_input(test_string)
+                result = "accepted" if is_accepted else "rejected"
+                self.log_result(f"Input '{test_string}' is {result} by the DFA")
         except Exception as e:
             self.log_result(f"Error testing input: {str(e)}")
+
+    def animate_string_processing(self, input_string):
+        steps = self.scanner.process_string_step_by_step(input_string)
+        
+        def animate_step(step_index):
+            if step_index >= len(steps):
+                # Animation finished
+                is_accepted = (steps[-1][0] is not None and 
+                             self.scanner.state_map[steps[-1][0]].is_final)
+                result = "accepted" if is_accepted else "rejected"
+                self.log_result(f"Input '{input_string}' is {result} by the DFA")
+                return
+
+            current_state, transition = steps[step_index]
+            
+            if current_state is None:
+                self.log_result("Input rejected - no valid transition")
+                return
+            
+            # Update visualization
+            dot = self.scanner.visualize_dfa(
+                highlight_state=current_state,
+                highlight_transition=transition
+            )
+            self.update_visualization(dot)
+            
+            # Schedule next step
+            delay = int(1000 / self.animation_speed.get())  # Convert to milliseconds
+            self.root.after(delay, lambda: animate_step(step_index + 1))
+
+        # Start animation
+        animate_step(0)
 
     def log_result(self, message):
         self.results_text.insert(tk.END, message + "\n")

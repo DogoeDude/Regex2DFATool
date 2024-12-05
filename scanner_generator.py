@@ -111,7 +111,7 @@ class Scanner:
         self.dfa = dfa_states
         return dfa_states
 
-    def visualize_dfa(self):
+    def visualize_dfa(self, highlight_state=None, highlight_transition=None):
         if not self.dfa:
             return None
 
@@ -125,19 +125,38 @@ class Scanner:
             attrs = {
                 'shape': 'doublecircle' if state.is_final else 'circle',
                 'style': 'filled',
-                'fillcolor': 'lightgreen' if state.is_final else 'lightblue',
                 'fontname': 'Arial'
             }
+            
+            # Highlight current state if specified
+            if highlight_state is not None and state.state_id == highlight_state:
+                attrs['fillcolor'] = 'yellow'  # Highlight color for current state
+                attrs['penwidth'] = '3'
+            else:
+                attrs['fillcolor'] = 'lightgreen' if state.is_final else 'lightblue'
             
             # Add state node
             dot.node(f'q{state.state_id}', f'q{state.state_id}', **attrs)
             
             # Add transitions
             for symbol, next_state in state.transitions.items():
+                edge_attrs = {
+                    'fontname': 'Arial',
+                    'label': symbol
+                }
+                
+                # Highlight current transition if specified
+                if (highlight_transition is not None and 
+                    highlight_state is not None and 
+                    state.state_id == highlight_state and 
+                    next_state.state_id == self.state_map[highlight_transition[1]].state_id and 
+                    symbol == highlight_transition[0]):
+                    edge_attrs['color'] = 'red'
+                    edge_attrs['penwidth'] = '2'
+                
                 dot.edge(f'q{state.state_id}', 
                         f'q{next_state.state_id}',
-                        label=symbol,
-                        fontname='Arial')
+                        **edge_attrs)
 
         # Add initial state marker
         dot.node('start', '', shape='none')
@@ -161,3 +180,21 @@ class Scanner:
             current_state = current_state.transitions[char]
         
         return current_state.is_final
+
+    def process_string_step_by_step(self, input_string):
+        if not self.dfa:
+            raise Exception("DFA not generated yet")
+        
+        steps = []
+        current_state = self.state_map[0]  # Start state
+        steps.append((current_state.state_id, None))  # Initial state
+        
+        for i, char in enumerate(input_string):
+            if char not in current_state.transitions:
+                return steps + [(None, None)]  # Indicate rejection
+            next_state = current_state.transitions[char]
+            steps.append((current_state.state_id, (char, next_state.state_id)))
+            current_state = next_state
+        
+        steps.append((current_state.state_id, None))  # Final state
+        return steps
