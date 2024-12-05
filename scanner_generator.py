@@ -1,9 +1,10 @@
 from typing import Dict, Set
 from regex_parser import RegexParser
 from regex_to_nfa import NFA, State
-import networkx as nx
-import matplotlib.pyplot as plt
+from graphviz import Digraph
+from PIL import Image
 from collections import deque
+import io
 
 class DFAState:
     def __init__(self, nfa_states):
@@ -110,49 +111,43 @@ class Scanner:
         self.dfa = dfa_states
         return dfa_states
 
-    def visualize_dfa(self, ax=None):
-        G = nx.DiGraph()
+    def visualize_dfa(self):
+        if not self.dfa:
+            return None
+
+        # Create a new directed graph
+        dot = Digraph(comment='DFA Visualization')
+        dot.attr(rankdir='LR')  # Left to right layout
         
-        # Add nodes
+        # Add nodes (states)
         for state in self.dfa:
-            G.add_node(state.state_id, 
-                      final=state.is_final,
-                      initial=state.state_id == 0)
-        
-        # Add edges
-        for state in self.dfa:
+            # Node attributes
+            attrs = {
+                'shape': 'doublecircle' if state.is_final else 'circle',
+                'style': 'filled',
+                'fillcolor': 'lightgreen' if state.is_final else 'lightblue',
+                'fontname': 'Arial'
+            }
+            
+            # Add state node
+            dot.node(f'q{state.state_id}', f'q{state.state_id}', **attrs)
+            
+            # Add transitions
             for symbol, next_state in state.transitions.items():
-                G.add_edge(state.state_id, next_state.state_id, label=symbol)
-        
-        # Use provided axes or create new figure
-        if ax is None:
-            plt.figure(figsize=(12, 8))
-            ax = plt.gca()
-        
-        pos = nx.spring_layout(G)
-        
-        # Draw nodes
-        nx.draw_networkx_nodes(G, pos, 
-                             node_color=['lightblue' if not G.nodes[n]['final'] else 'lightgreen' for n in G.nodes()],
-                             node_size=2000,
-                             ax=ax)
-        
-        # Draw initial state marker
-        initial_state = [n for n, attr in G.nodes(data=True) if attr['initial']][0]
-        ax.plot([pos[initial_state][0] - 0.15], [pos[initial_state][1]], 
-                marker='>', color='black', markersize=20)
-        
-        # Draw edges and labels
-        nx.draw_networkx_edges(G, pos, ax=ax)
-        nx.draw_networkx_labels(G, pos, ax=ax)
-        edge_labels = nx.get_edge_attributes(G, 'label')
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-        
-        ax.set_title("DFA Visualization")
-        ax.axis('off')
-        
-        if ax is None:
-            plt.show()
+                dot.edge(f'q{state.state_id}', 
+                        f'q{next_state.state_id}',
+                        label=symbol,
+                        fontname='Arial')
+
+        # Add initial state marker
+        dot.node('start', '', shape='none')
+        dot.edge('start', 'q0', '')
+
+        # Set graph attributes
+        dot.attr(bgcolor='white')
+        dot.attr(pad='0.5')
+
+        return dot
 
     def test_input(self, input_string):
         if not self.dfa:
