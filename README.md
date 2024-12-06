@@ -19,9 +19,7 @@ Steps in achieving the goal:
 
 The application supports REGEX's (), +, * and |. The graph gives out an animation for the inputted string.
 
-Here is an example GUI:
-
-![Screenshot 2024-12-06 093957](https://github.com/user-attachments/assets/ee27e94c-1e2e-4a3b-9d49-4c33be1de742)
+Here is another example for the application:
 
 ![image](https://github.com/user-attachments/assets/371ada51-28d1-4b52-b2c5-320fac15194a)
 
