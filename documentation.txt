@@ -115,3 +115,4 @@ Libraries:
 resources: 
     Subset Construction Algorithm:https://medium.com/@mmksajeeb/the-subset-construction-algorithm-nfa-%CE%B5-nfa-to-dfa-adf46dba31e3
     Thompsons Construction Algorithm: https://medium.com/swlh/visualizing-thompsons-construction-algorithm-for-nfas-step-by-step-f92ef378581b
+------------------------------------------------------------------------------------------------------------------------------------------------
