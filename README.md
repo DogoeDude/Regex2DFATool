@@ -9,7 +9,10 @@ The concept here is :
   code for a scanner based on the resulting automaton."
 
   What I have come up with is: 
+  
   ![Framework](https://github.com/user-attachments/assets/08cfd240-09de-4ff3-b3b2-d01fd096d03d)
+
+  
 Summarize steps in the development of this application:
   1. Create a GUI for the usability.
   2. Any inputed Regex will be parsed to which each character is individually identified.
