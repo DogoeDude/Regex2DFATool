@@ -29,7 +29,7 @@ The parser follows this grammar rules :
 The parser works by:
     1. Reading characters one by one
     2. Building a tree structure based on regex operators
-    3. Handling precedence through recursive calls
+    3. Handling it through recursive calls
     4. Creating appropriate node types for each operation
     5. This syntax tree is then used by regex_to_nfa.py to construct the NFA using Thompson's Construction Algorithm.
     6. The supported operations are:
@@ -81,7 +81,6 @@ Animation Processing:
 
 Lastly, the gui.py
     Import the needed functions from the other files for the merging of Thompsons and Subset Construction(Our main Algorithsm for conversion) and the other algorithms such as:
-    
 
     1. First and foremost, we initialize and class for the whole codebase to which it will have our scanner in.
     2. Layout the structure of the GUI using tkinter.
@@ -116,3 +115,7 @@ resources:
     Subset Construction Algorithm:https://medium.com/@mmksajeeb/the-subset-construction-algorithm-nfa-%CE%B5-nfa-to-dfa-adf46dba31e3
     Thompsons Construction Algorithm: https://medium.com/swlh/visualizing-thompsons-construction-algorithm-for-nfas-step-by-step-f92ef378581b
 -------------------------------------------------------------------------------------------------------------------------------------------------
+
+If you face problems for Digraph and Pillow use these commands:
+    python3.12 -m pip install pillow
+    python3.12 -m pip install graphviz
