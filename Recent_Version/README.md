@@ -24,7 +24,3 @@ Here is another example for the application:
 ![image](https://github.com/user-attachments/assets/371ada51-28d1-4b52-b2c5-320fac15194a)
 
 For more Documentation, please do review the Document.txt.
-
-To run the Programs use:
-    cd/Enter the Folder version
-    python gui.py

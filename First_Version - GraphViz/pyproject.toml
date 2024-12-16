@@ -1,0 +1,91 @@
+[tool.poetry]
+name = "FAdo"
+version = "2.2.0"
+packages = [{ include = "FAdo" }]
+description = "A library of tools to manipulate formal languages' representations  mainly automata and regular expressions."
+authors = ["Rogerio Reis <rogerio.reis@fc.up.pt>", "Nelma Moreira <nelma.moreira@fc.up.pt"]
+license = "GPL-3.0-or-later"
+readme = "README.rst"
+homepage = "https://fado.dcc.fc.up.pt"
+documentation = "https://www.dcc.fc.up.pt/~rvr/FAdoDoc"
+keywords = ["automata_theory",
+    "formal_languages",
+    "regular_expressions",
+    "transducers"]
+exclude = ["FAdo/madfa.py",
+    "FAdo/.idea",
+    "FAdo/aggregation.py",
+    "FAdo/aggregationFast.py",
+    "FAdo/avl.c", "FAdo/avl.h",
+    "FAdo/coreFA.c",
+    "FAdo/coreFA.h",
+    "FAdo/coreFA_setup.py",
+    "FAdo/generator.c",
+    "FAdo/generator.h",
+    "FAdo/generator_setup-linux.py",
+    "FAdo/generator_setup-mac.py",
+    "FAdo/icdfa.c",
+    "FAdo/icdfa.h",
+    "FAdo/icdfaCommon.h",
+    "FAdo/icdfaGen.h",
+    "FAdo/icdfaGen.c",
+    "FAdo/rndfa.py",
+    "FAdo/zset.h",
+    "FAdo/boltzmann.py",
+    "FAdo/icdfaboltz.py",
+    "FAdo/cliques.py",
+    "FAdo/fractran.py",
+    "FAdo/genMatrix.py",
+    "FAdo/ipython.py",
+    "FAdo/ILaser_gen.py",
+    "FAdo/Makefile",
+    "FAdo/nfaextra.py",
+    "FAdo/peg.py",
+    "FAdo/tdpl.py",
+    "FAdo/pddag.py",
+    "FAdo/pdkoz.py",
+    "FAdo/enumlang.py",
+    "FAdo/autshuffle.py",
+    "FAdo/samplereex.py",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+graphviz = "^0.19.1"
+networkx = "^2.6.3"
+argparse = "^1.4.0"
+ipython = "^7.0.0"
+deprecation = "^2.1.0"
+black = "^22.1.0"
+platformdirs = "^2.5.0"
+prompt-toolkit = "^3.0.27"
+tomli = "^2.0.1"
+jupyter = "^1.0.0"
+mistune = "^2.0.2"
+lark = "^1.1.5"
+bitarray = "^2.9.2"
+z3-solver = "^4.12.5.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+#addopts = '-m "not slow"'
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "serial",
+    "anyio"
+
+]
+
+[tool.poetry_bumpversion.file."FAdo/__init__.py"]
+
+[tool.poetry.scripts]
+my_package_cli = 'my_package.console:run'
+

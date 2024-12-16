@@ -28,7 +28,6 @@ The parser follows this grammar rules :
     }
 The parser works by:
     1. Reading characters one by one
-    2. Building a tree structure based on regex operators
     3. Handling it through recursive calls
     4. Creating appropriate node types for each operation
     5. This syntax tree is then used by regex_to_nfa.py to construct the NFA using Thompson's Construction Algorithm.
@@ -60,6 +59,17 @@ The scanner_generator.py works by utilizing Subset Construction algorithm.
                 iv. Add the transition and assign state ID's.
     3. E-closure computation: the set of all states reachable for their next transition through epsilon transitions.
     4. Visualize the DFA using Graphviz library in python.
++       - Improved visualization of transitions to dead states:
++           * Groups multiple transitions to the same state into a single edge
++           * Shows combined transitions with comma-separated symbols (e.g., "t,r,i,n,g")
++           * Skips self-loops in dead states to reduce visual clutter
++           * Clearly labels dead states with "(DEAD)" suffix
++       - Added zoom functionality:
++           * Zoom in/out buttons for detailed inspection
++           * Reset zoom option to fit the visualization to window
++           * Scrollbars for navigating large DFAs when zoomed
++           * Maintains image quality using LANCZOS resampling
++
     5. String testing.
     6. For the transition animation:
         a. Check if there are valid transitions from the current state being checked.
@@ -86,7 +96,19 @@ Lastly, the gui.py
     2. Layout the structure of the GUI using tkinter.
     3. Create input sections for the test and regex input.
     4. Add the animation controls of the file.
++       - Added zoom controls for DFA visualization:
++           * Zoom In (+): Increases visualization size by 20%
++           * Zoom Out (-): Decreases visualization size by 20%
++           * Reset Zoom: Returns to optimal fit in window
++           * Scrollbars appear automatically when needed
++
     5. DFA Generation and Visualization, Parse the Regex then the Parsed Regex will be processed to be converted to NFA through Thompsons construction Algorithm, once the generated NFA has been finished we use the NFA to be then passed through the next function to which it utilizes Subset Construction to which the NFA will be now converted to DFA.
++       - Enhanced DFA visualization:
++           * Combines multiple transitions to dead states into single edges
++           * Shows transition symbols in a comma-separated list
++           * Maintains readability with organized transition labels
++           * Displays total number of states including dead states
++
     To visualize it, we use the the scanner to which will have their own states considered in the code as DOTS.
     6.String test and Animating, use the visualization functions from each file.
     7. Animation: Show Final result and update each run through of the visualization with Highlights to which every after highlight, the next step is already scheduled.
@@ -119,4 +141,3 @@ resources:
 If you face problems for Digraph and Pillow use these commands:
     python3.12 -m pip install pillow
     python3.12 -m pip install graphviz
-    Or globalize the intallation or force them
